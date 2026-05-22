@@ -7,31 +7,33 @@ class TransactionService{
     this.transactionrepo=new Transactionrepository()
   }
   async transferFunds(referenceId,senderId,recieverId,amt){
+    console.log(senderId)
     const session=await mongoose.startSession();
     session.startTransaction();
     try{
-      const existingtx=await this.transactionrepo.findBy(referenceId,session);
+      const amount=Number(amt);
+      const existingtx=await this.transactionrepo.findBy({referenceId},session);
       if(existingtx){
         throw new Error("Duplicate transaction spotted!");
       }
-     const senderwallet=await this.walletrepo.findBy(senderId,session);
-     const recieverwallet=await this.walletrepo.findBy(recieverId,session);
+     const senderwallet=await this.walletrepo.findBy({userId:senderId},session);
+     const recieverwallet=await this.walletrepo.findBy({userId:recieverId},session);
      if(!senderwallet || !recieverwallet){
       throw new Error("Wallet not found");
      }
-     if(senderwallet.balance<amt){
+     if(senderwallet.balance<amount){
       throw new Error("balance is less than the amount ");
      }
-     senderwallet.balance-=amt;
+     senderwallet.balance-=amount;
      await senderwallet.save({session});
-     recieverwallet.balance+=amt;
+     recieverwallet.balance+=amount;
      await recieverwallet.save({session});
      const tx=await this.transactionrepo.create(
       {
-        referenceId: data.referenceId,
-        senderWalletId: senderWallet._id,
-        receiverWalletId: receiverWallet._id,
-        amount: data.amount,
+        referenceId: referenceId,
+        senderWalletId: senderwallet._id,
+        receiverWalletId: recieverwallet._id,
+        amount: amount,
         status: 'SUCCESS'
       }
      )
@@ -45,3 +47,5 @@ class TransactionService{
     }
   }
 }
+export default TransactionService
+

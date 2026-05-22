@@ -1,4 +1,4 @@
-import Transaction from "../models/transaction.model.js";
+import Transaction from "../models/transactionmodels.js"
 
 class Transactionrepository {
   async create(data, session = null) {
