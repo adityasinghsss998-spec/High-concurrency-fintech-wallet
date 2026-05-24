@@ -3,10 +3,10 @@ import Wallet from '../models/walletmodel.js'
 class Walletrepository {
   async create(data, session = null) {
     try {
-      const response = await Wallet.create([data], { session });
-      return response[0];
+      const wallet = new Wallet(data);
+      await wallet.save({ session });
+      return wallet;
     } catch(e) {
-      console.log("something went wrong at the repository layer");
       throw e;
     }
   }

@@ -21,3 +21,21 @@ export const createUserAccount = async (req, res) => {
         });
     }
 };
+export const loginUser = async (req, res) => {
+  try {
+    const response = await userService.login(req.body.email, req.body.password);
+    return res.status(200).json({
+      success: true,
+      message: "User authenticated successfully",
+      data: response,
+      err: {}
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Authentication failed",
+      err: error,
+      data: {}
+    });
+  }
+};

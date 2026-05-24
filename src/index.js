@@ -1,3 +1,5 @@
+import passport from 'passport';
+import {passportAuth} from './config/jwt-middleware.js'
 
 import express from 'express';
 import dotenv from 'dotenv';
@@ -5,6 +7,9 @@ import { connect } from './config/database.js'
 dotenv.config();
 import bodyParser from 'body-parser'
 const app = express();
+app.use(passport.initialize());
+passportAuth(passport);
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}));
 import Apiroutes from './routes/index.js'

@@ -46,6 +46,22 @@ class TransactionService{
       throw e;
     }
   }
+
+  async TransactionHistory(uid){
+    try{
+      const wallet=await this.walletrepo.findBy({userId:uid});
+      if(!wallet){
+        throw new Error("wallet not found!!")
+      }
+     const transaction=await this.transactionrepo.findTransaction(wallet._id);
+     console.log(transaction)
+     return transaction;
+    }catch(e){
+     
+      console.log("Somehting went wrong at the service layer");
+      throw e;
+    }
+  }
 }
 export default TransactionService
 
