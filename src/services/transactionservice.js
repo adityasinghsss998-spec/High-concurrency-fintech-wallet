@@ -55,7 +55,7 @@ class TransactionService{
       }
       const s=(p-1)*l;
      const response=await this.transactionrepo.findTransaction(wallet._id,s,l);
-     const totalpages=Math.ceil(response.c/l);
+     const totalpages=Math.ceil(response.cnt/l);
      return {
        transaction:response.txs,
        pages:totalpages,

@@ -32,7 +32,6 @@ class Transactionrepository {
       const txs=await Transaction.find(b).sort({createdAt:-1}).skip(s).limit(l);
       const cnt=await Transaction.countDocuments(b);
       return {txs,cnt};
-      return response;
     } catch(e) {
       console.log("something went wrong at the repository layer");
       throw e;
