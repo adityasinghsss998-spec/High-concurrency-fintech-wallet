@@ -47,15 +47,21 @@ class TransactionService{
     }
   }
 
-  async TransactionHistory(uid){
+  async TransactionHistory(uid,p,l){
     try{
       const wallet=await this.walletrepo.findBy({userId:uid});
       if(!wallet){
         throw new Error("wallet not found!!")
       }
-     const transaction=await this.transactionrepo.findTransaction(wallet._id);
-     console.log(transaction)
-     return transaction;
+      const s=(p-1)*l;
+     const response=await this.transactionrepo.findTransaction(wallet._id,s,l);
+     const totalpages=Math.ceil(response.c/l);
+     return {
+       transaction:response.txs,
+       pages:totalpages,
+       currentpage:p,
+       totalitems:response.cnt
+     }
     }catch(e){
      
       console.log("Somehting went wrong at the service layer");

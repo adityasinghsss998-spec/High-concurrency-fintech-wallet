@@ -37,7 +37,9 @@ export const transfer=async (req,res)=>{
 export const history = async (req, res) => {
   try {
     const uId = req.user._id || req.user.id;
-    const transaction = await transactionservice.TransactionHistory(uId);
+    const p=Number(req.query.page) || 1;
+    const l=Number(req.query.limit) || 10;
+    const transaction = await transactionservice.TransactionHistory(uId,p,l);
     return res.status(200).json({
       success: true,
       message: "History fetched",

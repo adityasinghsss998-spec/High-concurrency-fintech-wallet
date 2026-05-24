@@ -20,15 +20,18 @@ class Transactionrepository {
       throw e;
     }
   }
-  async findTransaction(wId){
+  async findTransaction(wId,s,l){
     try {
       const objectId = new mongoose.Types.ObjectId(wId);
-      const response=await Transaction.find({
+      const b={
           $or: [
           { senderWalletId: objectId }, 
           { receiverWalletId: objectId }
         ]
-      }).sort({createdAt:-1});
+      }
+      const txs=await Transaction.find(b).sort({createdAt:-1}).skip(s).limit(l);
+      const cnt=await Transaction.countDocuments(b);
+      return {txs,cnt};
       return response;
     } catch(e) {
       console.log("something went wrong at the repository layer");
