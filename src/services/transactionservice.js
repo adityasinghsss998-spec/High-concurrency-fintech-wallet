@@ -64,7 +64,8 @@ class TransactionService{
      }
     }catch(e){
      
-      console.log("Somehting went wrong at the service layer");
+      console.log("Somehting went wrong at the service layer",e.message);
+      console.log(e.stack)
       throw e;
     }
   }
